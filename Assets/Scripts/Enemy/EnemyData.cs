@@ -1,0 +1,22 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEditor;
+
+public class EnemyData : ScriptableObject {
+
+    // TODO: enemy prefab
+    public int enemyId;
+    public float health;
+    public float speed;
+    public int score;
+    public int gold;
+    public int lifeCost;
+
+#if UNITY_EDITOR
+    [MenuItem("Assets/Create/Enemy Data")]
+    public static void CreateAsset() {
+        ScriptableObjectUtility.CreateAsset<EnemyData>();
+    }
+#endif
+}
