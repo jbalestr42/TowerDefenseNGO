@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Pathfinding;
+using UnityEngine;
 
 public class GridCell
 {
@@ -10,16 +10,35 @@ public class GridCell
 
 public class GridManager : Singleton<GridManager> 
 {
-    public int _width;
-    public int _height;
-    public int _size;
+    [SerializeField]
+    GameObject _ground;
 
-    private Vector3 _min;
-    private Vector3 _max;
-    private GridCell[] _grid;
+    [SerializeField]
+    int _width;
+    public int width { get { return _width; } set { _width = value; } }
+
+    [SerializeField]
+    int _height;
+    public int height { get { return _height; } set { _height = value; } }
+
+    [SerializeField]
+    float _size;
+    public float size { get { return _size; } set { _size = value; } }
+
+    Vector3 _min;
+    Vector3 _max;
+    GridCell[] _grid;
 
     void Start()
     {
+        GenerateGrid();
+    }
+
+    public void GenerateGrid()
+    {
+        AstarPath aStar = GetComponent<AstarPath>();
+        aStar.data.gridGraph.SetDimensions(_width, _height, _size);
+
         _min = transform.position;
         _min.x -= (_width / 2.0f) * _size;
         _min.z -= (_height / 2.0f) * _size;
@@ -32,6 +51,9 @@ public class GridManager : Singleton<GridManager>
             _grid[i] = new GridCell();
             _grid[i].IsEmpty = true;
         }
+
+        _ground.transform.localScale = new Vector3(_width * _size, 1f, _height * _size);
+        aStar.data.gridGraph.Scan();
     }
 
     public bool IsEmpty(int x, int y)
