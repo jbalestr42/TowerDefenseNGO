@@ -8,7 +8,7 @@ using UnityEngine;
 * The event can be invoked in OnEnable if the player is already initialized
 * otherwise it waits for the player to be initialized to invoke the event 
 */
-public abstract class ALocalPlayerInitializer : MonoBehaviour
+public abstract class ALocalPlayerInitializer : NetworkBehaviour
 {
     bool _isRegistered = false;
 
@@ -16,7 +16,7 @@ public abstract class ALocalPlayerInitializer : MonoBehaviour
 
     void OnEnable()
     {
-        if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsConnectedClient)
+        if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsConnectedClient && NetworkManager.Singleton.LocalClient.PlayerObject != null)
         {
             NetworkClientBase playerState = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<NetworkClientBase>();
             if (playerState.isInitialized)

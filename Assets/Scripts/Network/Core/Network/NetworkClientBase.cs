@@ -52,9 +52,12 @@ public class NetworkClientBase : NetworkBehaviour
 
     public void OnOwnerInitializationDone(int oldValue, int newValue)
     {
-        Debug.Log("[OnOwnerInitializationDone]");
-        LocalPlayer.instance.networkPlayer = gameObject;
-        LocalPlayer.instance.OnLocalPlayerInitialized.Invoke(gameObject);
+        if (isInitialized)
+        {
+            Debug.Log("[OnOwnerInitializationDone] " + newValue);
+            LocalPlayer.instance.networkPlayer = gameObject;
+            LocalPlayer.instance.OnLocalPlayerInitialized.Invoke(gameObject);
+        }
     }
 
     public void OnClientInitializationDone(int oldValue, int newValue)

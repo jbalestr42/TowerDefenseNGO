@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class SelectTowerButton : MonoBehaviour
@@ -8,7 +9,7 @@ public class SelectTowerButton : MonoBehaviour
 
     public void SelectTower()
     {
-        PlayerBehavior player = LocalPlayer.instance.networkPlayer.GetComponent<PlayerBehavior>();
+        PlayerBehaviour player = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<PlayerBehaviour>();
         if (player.gold >= Data.cost)
         {
             InteractionManager.instance.SetInteraction(new GridInteraction(Data));

@@ -110,10 +110,10 @@ public class GameManager : NetworkSingleton<GameManager> {
         var players = NetworkManager.Singleton.ConnectedClients;
         foreach (var player in players)
         {
-            PlayerBehavior playerBehavior = player.Value.PlayerObject.GetComponent<PlayerBehavior>();
-            if (playerBehavior != null)
+            PlayerBehaviour playerBehaviour = player.Value.PlayerObject.GetComponent<PlayerBehaviour>();
+            if (playerBehaviour != null)
             {
-                playerBehavior.isReady = ready;
+                playerBehaviour.isReady = ready;
             }
         }
     }
@@ -121,10 +121,10 @@ public class GameManager : NetworkSingleton<GameManager> {
     public bool AreAllPlayerReady()
     {
         var players = NetworkManager.Singleton.ConnectedClients;
-        bool ready = true;
+        bool ready = players.Count > 0;
         foreach (var player in players)
         {
-            ready = ready && player.Value.PlayerObject.GetComponent<PlayerBehavior>().isReady;
+            ready = ready && player.Value.PlayerObject != null && player.Value.PlayerObject.GetComponent<PlayerBehaviour>().isReady;
         }
         return ready;
     }

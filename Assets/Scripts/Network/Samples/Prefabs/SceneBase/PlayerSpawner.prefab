@@ -45,16 +45,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a48fd2f17e7aa9c41a81652f1b42c737, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spawnPoint: []
   _clientPrefabs:
   - role: 0
-    prefab: {fileID: 1680559602383445841, guid: 9eb16d78859f8964e90884eb28ca708b,
-      type: 3}
-  - role: 1
-    prefab: {fileID: 1680559602383445841, guid: 9eb16d78859f8964e90884eb28ca708b,
-      type: 3}
+    prefab: {fileID: 1354588657643068, guid: 90371a4bb96e09047ae9824eae0152c3, type: 3}
   - role: 2
-    prefab: {fileID: 1680559602383445841, guid: 9eb16d78859f8964e90884eb28ca708b,
-      type: 3}
+    prefab: {fileID: 1354588657643068, guid: 90371a4bb96e09047ae9824eae0152c3, type: 3}
 --- !u!114 &4464099603739798134
 MonoBehaviour:
   m_ObjectHideFlags: 0

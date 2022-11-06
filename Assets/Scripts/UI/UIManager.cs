@@ -29,17 +29,9 @@ public class UIManager : Singleton<UIManager> {
 
     public UIInventory GetUIInventory { get { return _uiInventory; } }
 
-    public PlayerBehavior currentPlayer { get; set; }
-
     void Awake()
     {
         _isReadyButton.onClick.AddListener(IsReadyOnClick);
-        _inputFieldName.onEndEdit.AddListener(SetNameOnEndEdit);
-        for (int i = 0; i < _chooseColor.Count; i++)
-        {
-            int index = i;
-            _chooseColor[i].onClick.AddListener(() => SetColorOnClick(_chooseColor[index].GetComponent<UnityEngine.UI.Image>().color));
-        }
     }
 
     #region Accessor to other UI systems
@@ -105,17 +97,7 @@ public class UIManager : Singleton<UIManager> {
 
     void IsReadyOnClick()
     {
-        currentPlayer.SetReadyServerRpc(true);
-    }
-
-    void SetNameOnEndEdit(string text)
-    {
-        currentPlayer.SetPlayerNameServerRpc(text);
-    }
-
-    void SetColorOnClick(Color color)
-    {
-        currentPlayer.SetColorServerRpc(color);
+        PlayerBehaviour.current.SetReadyServerRpc(true);
     }
 
     #endregion

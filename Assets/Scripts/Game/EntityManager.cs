@@ -105,19 +105,19 @@ public class EntityManager : NetworkSingleton<EntityManager>
     public void SpawnTowerServerRpc(TowerType towerType, ulong playerId, Vector3 position)
     {
         TowerData data = DataManager.instance.GetTowerData(towerType);
-        Vector2Int coord = GridManager.instance.GetCoordFromPosition(position);
-        PlayerBehavior player = NetworkManager.Singleton.ConnectedClients[playerId].PlayerObject.GetComponent<PlayerBehavior>();
+        PlayerBehaviour player = NetworkManager.Singleton.ConnectedClients[playerId].PlayerObject.GetComponent<PlayerBehaviour>();
+        Vector2Int coord = player.grid.GetCoordFromPosition(position);
 
-        if (GridManager.instance.IsEmpty(coord.x, coord.y) && player.gold >= data.cost)
+        if (player.grid.IsEmpty(coord.x, coord.y) && player.gold >= data.cost)
         {
             GameObject tower = Instantiate(_towerBasePrefab, Vector3.zero, Quaternion.identity);
             tower.transform.position = position;
 
-            if (GridManager.instance.CanPlaceObject(tower))
+            if (player.grid.CanPlaceObject(tower))
             {
                 tower.GetComponent<NetworkObject>().SpawnWithOwnership(playerId);
                 tower.GetComponent<TowerBehaviour>().towerType = towerType;
-                GridManager.instance.SetEmpty(coord.x, coord.y, false);
+                player.grid.SetEmpty(coord.x, coord.y, false);
                 player.gold -= data.cost;
                 _towers.Add(tower);
             }

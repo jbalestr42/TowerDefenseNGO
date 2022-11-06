@@ -2,9 +2,11 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerBehavior : NetworkBehaviour
+public class PlayerBehaviour : NetworkBehaviour
 {
-    UIPlayerHUD _playerUI;
+    [SerializeField] GridManager _grid;
+    public GridManager grid { get { return _grid; } set { _grid = value; } }
+
     Renderer _renderer;
 
     NetworkVariable<int> _gold = new NetworkVariable<int>();
@@ -16,16 +18,10 @@ public class PlayerBehavior : NetworkBehaviour
     NetworkVariable<bool> _isReady = new NetworkVariable<bool>();
     public bool isReady { get { return _isReady.Value; } set { _isReady.Value = value; } }
 
-    NetworkVariable<Color> _color = new NetworkVariable<Color>();
-    public Color color { get { return _color.Value; } set { _color.Value = value; } }
-
-    NetworkVariable<FixedString64Bytes> _playerName = new NetworkVariable<FixedString64Bytes>("");
-    public string playerName { get { return _playerName.Value.ToString(); } set { _playerName.Value = value; } }
+    public static PlayerBehaviour current = null;
 
     void Start()
     {
-        _color.OnValueChanged += (Color old, Color value) => { _renderer.material.color = value; };
-        _playerName.OnValueChanged += (FixedString64Bytes old, FixedString64Bytes value) => { _playerUI.SetPlayerName(value.ToString()); };
         _gold.OnValueChanged += (int old, int value) => { UpdateGold(); };
         _score.OnValueChanged += (int old, int value) => { UpdateScore(); };
         _isReady.OnValueChanged += (bool old, bool value) => { UpdateIsReady(); };
@@ -35,14 +31,10 @@ public class PlayerBehavior : NetworkBehaviour
     {
         if (IsOwner)
         {
-            UIManager.instance.currentPlayer = this;
-            SetColorServerRpc(Random.ColorHSV());
+            current = this;
             SetGoldServerRpc(100);
             UpdateGold();
         }
-
-        _renderer = GetComponentInChildren<Renderer>();
-        _playerUI = GetComponentInChildren<UIPlayerHUD>();
     }
 
     [ServerRpc]
@@ -55,18 +47,6 @@ public class PlayerBehavior : NetworkBehaviour
     public void SetScoreServerRpc(int score)
     {
         _score.Value = score;
-    }
-
-    [ServerRpc]
-    public void SetColorServerRpc(Color color)
-    {
-        _color.Value = color;
-    }
-
-    [ServerRpc]
-    public void SetPlayerNameServerRpc(string playerName)
-    {
-        _playerName.Value = playerName;
     }
 
     [ServerRpc]

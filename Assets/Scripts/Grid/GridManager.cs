@@ -8,7 +8,7 @@ public class GridCell
     public bool IsEmpty { get; set; }
 }
 
-public class GridManager : Singleton<GridManager> 
+public class GridManager : MonoBehaviour 
 {
     [SerializeField]
     GameObject _ground;
@@ -28,6 +28,7 @@ public class GridManager : Singleton<GridManager>
     Vector3 _min;
     Vector3 _max;
     GridCell[] _grid;
+    GridGraph _gridGraph;
 
     void Start()
     {
@@ -36,15 +37,13 @@ public class GridManager : Singleton<GridManager>
 
     public void GenerateGrid()
     {
-        AstarPath aStar = GetComponent<AstarPath>();
-        aStar.data.gridGraph.SetDimensions(_width, _height, _size);
-
         _min = transform.position;
         _min.x -= (_width / 2.0f) * _size;
         _min.z -= (_height / 2.0f) * _size;
         _max = transform.position;
         _max.x += (_width / 2.0f) * _size + _size;
         _max.z += (_height / 2.0f) * _size + _size;
+
         _grid = new GridCell[_width * _height];
         for (int i = 0; i < _grid.Length; i++)
         {
@@ -53,7 +52,12 @@ public class GridManager : Singleton<GridManager>
         }
 
         _ground.transform.localScale = new Vector3(_width * _size, 1f, _height * _size);
-        aStar.data.gridGraph.Scan();
+
+        _gridGraph = AstarPath.active.data.AddGraph(typeof(GridGraph)) as GridGraph;
+        _gridGraph.collision.heightMask = LayerMask.GetMask("Terrain");
+        _gridGraph.center = transform.position;
+        _gridGraph.SetDimensions(_width, _height, _size);
+        _gridGraph.Scan();
     }
 
     public bool IsEmpty(int x, int y)
@@ -93,9 +97,8 @@ public class GridManager : Singleton<GridManager>
     public bool CanPlaceObject(GameObject gameObject)
     {
         var guo = new GraphUpdateObject(gameObject.GetComponentInChildren<Collider>().bounds);
-        var start = AstarPath.active.GetNearest(GameObject.FindWithTag("SpawnStart").transform.position).node;
-        var end = AstarPath.active.GetNearest(GameObject.FindWithTag("SpawnEnd").transform.position).node;
-
+        var start = _gridGraph.GetNearest(GameObject.FindWithTag("SpawnStart").transform.position).node;
+        var end = _gridGraph.GetNearest(GameObject.FindWithTag("SpawnEnd").transform.position).node;
         return GraphUpdateUtilities.UpdateGraphsNoBlock(guo, start, end, false);
     }
 

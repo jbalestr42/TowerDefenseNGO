@@ -113,8 +113,8 @@ public class PlayerManager : NetworkBehaviour
         if (client != null && client.prefab != null)
         {
             Debug.Log($"Spawning '{clientRole}' for client {clientId}");
-            GameObject player = Instantiate(client.prefab);
-            player.transform.position = new Vector3(0f, 1f, 0f);
+            Transform spawnPoint = SpawnManager.instance.GetNextSpawnPoint();
+            GameObject player = Instantiate(client.prefab, spawnPoint.position, spawnPoint.rotation);
             NetworkObject networkObject = player.GetComponent<NetworkObject>();
             networkObject.SpawnAsPlayerObject(clientId, true);
 

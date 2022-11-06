@@ -22,7 +22,7 @@ public class GridInteraction : AInteraction
 
     public override void OnMouseClick(Vector3 position)
     {
-        EntityManager.instance.SpawnTowerServerRpc((TowerType)_data.towerType, NetworkManager.Singleton.LocalClientId, GridManager.instance.GetCellCenterFromPosition(position));
+        EntityManager.instance.SpawnTowerServerRpc((TowerType)_data.towerType, NetworkManager.Singleton.LocalClientId, PlayerBehaviour.current.grid.GetCellCenterFromPosition(position));
         InteractionManager.instance.EndInteraction();
     }
 
@@ -30,7 +30,7 @@ public class GridInteraction : AInteraction
     {
         if (_tower)
         {
-            _tower.transform.position = GridManager.instance.GetCellCenterFromPosition(position);
+            _tower.transform.position = PlayerBehaviour.current.grid.GetCellCenterFromPosition(position);
         }
     }
 
