@@ -17,6 +17,9 @@ public class EnemyBehaviour : NetworkBehaviour, ISelectable, ITargetable {
     NetworkVariable<float> _healthMax = new NetworkVariable<float>();
     public float healthMax { get { return _healthMax.Value; } set { _healthMax.Value = value; } }
 
+    PlayerBehaviour _player;
+    public PlayerBehaviour player { get { return _player; } set { _player = value; } }
+
     void Start()
     {
         _enemyUI = GetComponentInChildren<UIEnemyHUD>();
@@ -40,7 +43,7 @@ public class EnemyBehaviour : NetworkBehaviour, ISelectable, ITargetable {
             attributeManager.Add(AttributeType.Health, _healthAtt);
 
             var movement = gameObject.AddComponent<EnemyMovement>();
-            movement.Init_Server(_data.speed);
+            movement.InitServer(player, _data.speed);
         }
     }
     

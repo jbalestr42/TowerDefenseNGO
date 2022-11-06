@@ -131,12 +131,16 @@ public class GameManager : NetworkSingleton<GameManager> {
 
     IEnumerator StartWave(WaveData wave)
     {
-        int count = wave.count;
-
+        var players = NetworkManager.Singleton.ConnectedClients;
         var wait = new WaitForSeconds(wave.spawnRate);
+
+        int count = wave.count;
         while (count != 0)
         {
-            EntityManager.instance.SpawnEnemy(wave.enemyData);
+            foreach (var player in players)
+            {
+                EntityManager.instance.SpawnEnemy(wave.enemyData, player.Value.PlayerObject.GetComponent<PlayerBehaviour>());
+            }
             count--;
             yield return wait;
         }
