@@ -1309,8 +1309,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _waves:
-  - {fileID: 11400000, guid: 5c62fd0b991b7b94d8b323d3682e0d5c, type: 2}
   - {fileID: 11400000, guid: 7e022d42077593240a136b3500a9f46f, type: 2}
+  - {fileID: 11400000, guid: 5c62fd0b991b7b94d8b323d3682e0d5c, type: 2}
   _bullets:
     keys: 0100000000000000
     values:
@@ -1390,7 +1390,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 645146366}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc1bce6f76039b641b99ad4460e1761e, type: 3}
+  m_Script: {fileID: 11500000, guid: 3627c2b0044d34e44aaa7568e6ccde25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &658111705
@@ -2206,7 +2206,7 @@ PrefabInstance:
     - target: {fileID: 4894230336466293722, guid: 761ae59a2f5df6148918073ea0fbcdf8,
         type: 3}
       propertyPath: _startEditorAsHost
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 761ae59a2f5df6148918073ea0fbcdf8, type: 3}

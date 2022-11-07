@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using Unity.Netcode;
 
-public enum GameState {
+public enum GameState
+{
     None,
     WaitingForPlayers,
     StartWave, // Start the coroutine to spawn enemies
@@ -18,9 +19,8 @@ public enum GameState {
 /*
  * Only instantiated by the server
  * */
-public class GameManager : NetworkSingleton<GameManager>
+public class GameWaveManager : NetworkSingleton<GameWaveManager>
 {
-
     List<WaveData> _waves = null;
 
     GameState _state = GameState.None;

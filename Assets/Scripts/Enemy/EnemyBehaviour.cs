@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class EnemyBehaviour : NetworkBehaviour, ISelectable, ITargetable {
+public class EnemyBehaviour : NetworkBehaviour, ISelectable, ITargetable
+{
+    [SerializeField] UIEnemyHUD _enemyUI;
+    [SerializeField] Transform _modelParent;
 
-    UIEnemyHUD _enemyUI;
     SKU.ResourceAttribute _healthAtt = null;
 
     EnemyData _data;
@@ -22,17 +24,22 @@ public class EnemyBehaviour : NetworkBehaviour, ISelectable, ITargetable {
 
     void Start()
     {
-        _enemyUI = GetComponentInChildren<UIEnemyHUD>();
         _health.OnValueChanged += (float old, float value) => { UpdateHealthUI(); };
     }
 
     public override void OnDestroy()
     {
-        UIManager.instance.HidePanel(PanelType.Enemy);
+        if (UIManager.instance != null)
+        {
+            UIManager.instance.HidePanel(PanelType.Enemy);
+        }
     }
 
     public override void OnNetworkSpawn()
     {
+        GameObject model = Instantiate(_data.model);
+        model.transform.SetParent(_modelParent, false);
+
         if (IsServer)
         {
             health = _data.health;
@@ -112,7 +119,7 @@ public class EnemyBehaviour : NetworkBehaviour, ISelectable, ITargetable {
             {
                 EntityManager.instance.DestroyEnemy(gameObject);
                 // TODO: on enemy reach end event
-                GameManager.instance.LooseLife(_data.lifeCost);
+                GameWaveManager.instance.LooseLife(_data.lifeCost);
             }
         }
     }

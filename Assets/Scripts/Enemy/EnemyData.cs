@@ -5,6 +5,7 @@ using UnityEditor;
 
 public class EnemyData : ScriptableObject
 {
+    public GameObject model;
     public float health;
     public float speed;
     public int score;
