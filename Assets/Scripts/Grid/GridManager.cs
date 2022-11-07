@@ -60,6 +60,14 @@ public class GridManager : MonoBehaviour
         _gridGraph.Scan();
     }
 
+    void OnDestroy()
+    {
+        if (_gridGraph != null)
+        {
+            AstarPath.active.data.RemoveGraph(_gridGraph);
+        }
+    }
+
     public bool IsEmpty(int x, int y)
     {
         if (x >= 0 && x < _width && y >= 0 && y < _height)
