@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 
-public interface ICameraMovement {
-
+public interface ICameraMovement
+{
     void Update(Camera camera);
 }
