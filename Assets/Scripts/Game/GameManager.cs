@@ -18,7 +18,8 @@ public enum GameState {
 /*
  * Only instantiated by the server
  * */
-public class GameManager : NetworkSingleton<GameManager> {
+public class GameManager : NetworkSingleton<GameManager>
+{
 
     List<WaveData> _waves = null;
 

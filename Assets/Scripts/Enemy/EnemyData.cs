@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class EnemyData : ScriptableObject {
-
-    // TODO: enemy prefab
-    public int enemyId;
+public class EnemyData : ScriptableObject
+{
     public float health;
     public float speed;
     public int score;
@@ -15,7 +13,8 @@ public class EnemyData : ScriptableObject {
 
 #if UNITY_EDITOR
     [MenuItem("Assets/Create/Enemy Data")]
-    public static void CreateAsset() {
+    public static void CreateAsset()
+    {
         ScriptableObjectUtility.CreateAsset<EnemyData>();
     }
 #endif

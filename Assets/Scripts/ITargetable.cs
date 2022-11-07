@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ITargetable {
+public interface ITargetable
+{
     void OnHit(GameObject emitter);
 }

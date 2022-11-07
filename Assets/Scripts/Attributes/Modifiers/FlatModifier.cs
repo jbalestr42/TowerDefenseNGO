@@ -2,19 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlatModifier : SKU.IAttributeModifier {
-
+public class FlatModifier : SKU.IAttributeModifier
+{
     float _value = 0f;
 
-    public FlatModifier(float value) {
+    public FlatModifier(float value)
+    {
         _value = value;
     }
 
-    public float ApplyModifier() {
+    public float ApplyModifier()
+    {
         return _value;
     }
 
-    public bool IsOver() {
+    public bool IsOver()
+    {
         return false;
     }
 }

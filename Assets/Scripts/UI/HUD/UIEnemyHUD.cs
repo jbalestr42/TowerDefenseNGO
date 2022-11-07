@@ -2,21 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIEnemyHUD : MonoBehaviour {
-
+public class UIEnemyHUD : MonoBehaviour
+{
     public UnityEngine.UI.Text _name;
     public UnityEngine.UI.Image _health;
     public float amount = 0.5f;
 
-    void Update() {
+    void Update()
+    {
         transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
     }
 
-    public void SetPlayerName(string name) {
+    public void SetPlayerName(string name)
+    {
         _name.text = name;
     }
 
-    public void SetHealthBar(float ratio) {
+    public void SetHealthBar(float ratio)
+    {
         _health.fillAmount = ratio;
     }
 }
