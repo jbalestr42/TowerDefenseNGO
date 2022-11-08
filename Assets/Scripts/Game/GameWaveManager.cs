@@ -140,7 +140,7 @@ public class GameWaveManager : NetworkSingleton<GameWaveManager>
         {
             foreach (var player in players)
             {
-                EntityManager.instance.SpawnEnemy(wave.enemyData, player.Value.PlayerObject.GetComponent<PlayerBehaviour>());
+                EntityManager.instance.SpawnEnemy(_currentWave, wave.enemyData, player.Value.PlayerObject.GetComponent<PlayerBehaviour>());
             }
             count--;
             yield return wait;

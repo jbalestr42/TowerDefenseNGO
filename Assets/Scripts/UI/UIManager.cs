@@ -60,7 +60,7 @@ public class UIManager : Singleton<UIManager> {
 
     public void HidePanel(PanelType type)
     {
-        if (type != PanelType.None)
+        if (type != PanelType.None && Panels[type] != null)
         {
             Panels[type].HideUI();
             _selectedPanel = PanelType.None;

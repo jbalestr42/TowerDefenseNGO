@@ -14,7 +14,7 @@ public class GridManagerEditor : Editor
 
         if (GUILayout.Button("Generate Grid"))
         {
-            gridManager.GenerateGrid();
+            gridManager.Generate();
         }
     }
 }

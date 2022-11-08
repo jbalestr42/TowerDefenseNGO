@@ -30,10 +30,11 @@ public class EntityManager : NetworkSingleton<EntityManager>
 
     #region Enemies
 
-    public void SpawnEnemy(EnemyData data, PlayerBehaviour player)
+    public void SpawnEnemy(int waveIndex, EnemyData data, PlayerBehaviour player)
     {
         GameObject enemy = Instantiate(_enemyPrefab, Vector3.zero, Quaternion.identity);
         enemy.GetComponent<EnemyBehaviour>().data = data;
+        enemy.GetComponent<EnemyBehaviour>().waveIndex = waveIndex;
         enemy.GetComponent<EnemyBehaviour>().player = player;
         enemy.GetComponent<NetworkObject>().Spawn();
         _enemies.Add(enemy);

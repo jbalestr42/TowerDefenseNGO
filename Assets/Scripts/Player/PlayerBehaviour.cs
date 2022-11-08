@@ -7,6 +7,9 @@ public class PlayerBehaviour : NetworkBehaviour
     [SerializeField] GridManager _grid;
     public GridManager grid { get { return _grid; } set { _grid = value; } }
 
+    [SerializeField] GridGenerator _gridGenerator;
+    public GridGenerator gridGenerator { get { return _gridGenerator; } set { _gridGenerator = value; } }
+
     Renderer _renderer;
 
     NetworkVariable<int> _gold = new NetworkVariable<int>();
@@ -29,13 +32,25 @@ public class PlayerBehaviour : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        if (IsOwner || IsServer)
+        {
+            _grid.Generate();
+        }
+
         if (IsOwner)
         {
             current = this;
             SetGoldServerRpc(100);
             UpdateGold();
             CameraManager.instance.SetCameraMovement(new FollowCamera(gameObject.transform, new Vector3(0f, 5, -10)));
+            GenerateServerRpc();
         }
+    }
+
+    [ServerRpc]
+    public void GenerateServerRpc()
+    {
+        _gridGenerator.Generate(_grid, transform);
     }
 
     [ServerRpc]

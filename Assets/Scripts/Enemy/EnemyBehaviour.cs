@@ -19,8 +19,13 @@ public class EnemyBehaviour : NetworkBehaviour, ISelectable, ITargetable
     NetworkVariable<float> _healthMax = new NetworkVariable<float>();
     public float healthMax { get { return _healthMax.Value; } set { _healthMax.Value = value; } }
 
+    NetworkVariable<int> _waveIndex = new NetworkVariable<int>();
+    public int waveIndex { get { return _waveIndex.Value; } set { _waveIndex.Value = value; } }
+
     PlayerBehaviour _player;
     public PlayerBehaviour player { get { return _player; } set { _player = value; } }
+
+    EnemyMovement _movement;
 
     void Start()
     {
@@ -37,7 +42,7 @@ public class EnemyBehaviour : NetworkBehaviour, ISelectable, ITargetable
 
     public override void OnNetworkSpawn()
     {
-        GameObject model = Instantiate(_data.model);
+        GameObject model = Instantiate(DataManager.instance.waves[waveIndex].enemyData.model);
         model.transform.SetParent(_modelParent, false);
 
         if (IsServer)
@@ -49,8 +54,8 @@ public class EnemyBehaviour : NetworkBehaviour, ISelectable, ITargetable
             AttributeManager attributeManager = gameObject.AddComponent<AttributeManager>();
             attributeManager.Add(AttributeType.Health, _healthAtt);
 
-            var movement = gameObject.AddComponent<EnemyMovement>();
-            movement.InitServer(player, _data.speed);
+            _movement = gameObject.AddComponent<EnemyMovement>();
+            _movement.InitServer(player, _data.speed);
         }
     }
     
@@ -115,11 +120,17 @@ public class EnemyBehaviour : NetworkBehaviour, ISelectable, ITargetable
     {
         if (IsServer)
         {
-            if (collision.gameObject.tag == "SpawnEnd")
+            CheckPoint checkPoint = collision.gameObject.GetComponent<CheckPoint>();
+            if (checkPoint != null && _movement.destination == checkPoint)
             {
-                EntityManager.instance.DestroyEnemy(gameObject);
-                // TODO: on enemy reach end event
-                GameWaveManager.instance.LooseLife(_data.lifeCost);
+                if (checkPoint.isLast)
+                {
+                    EntityManager.instance.DestroyEnemy(gameObject);
+                }
+                else
+                {
+                    _movement.SetNextDestination(checkPoint.next);
+                }
             }
         }
     }

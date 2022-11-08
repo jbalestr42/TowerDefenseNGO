@@ -959,7 +959,7 @@ MonoBehaviour:
   manualDebugFloorRoof: 0
   showSearchTree: 0
   unwalkableNodeDebugSize: 0.3
-  logPathResults: 0
+  logPathResults: 4
   maxNearestNodeDistance: 100
   scanOnStartup: 1
   fullGetNearestSearch: 0
@@ -1309,8 +1309,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _waves:
-  - {fileID: 11400000, guid: 7e022d42077593240a136b3500a9f46f, type: 2}
   - {fileID: 11400000, guid: 5c62fd0b991b7b94d8b323d3682e0d5c, type: 2}
+  - {fileID: 11400000, guid: 7e022d42077593240a136b3500a9f46f, type: 2}
   _bullets:
     keys: 0100000000000000
     values:
@@ -2111,7 +2111,7 @@ PrefabInstance:
     - target: {fileID: 4894230336466293716, guid: 761ae59a2f5df6148918073ea0fbcdf8,
         type: 3}
       propertyPath: NetworkConfig.NetworkPrefabs.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4894230336466293716, guid: 761ae59a2f5df6148918073ea0fbcdf8,
         type: 3}
@@ -2141,7 +2141,7 @@ PrefabInstance:
         type: 3}
       propertyPath: NetworkConfig.NetworkPrefabs.Array.data[4].Prefab
       value: 
-      objectReference: {fileID: 1293989677201975775, guid: 6319372ad71e5f2408b25f34b54c00a1,
+      objectReference: {fileID: 9141750140142513886, guid: 356c856d27b224948a6a15287e83110a,
         type: 3}
     - target: {fileID: 4894230336466293717, guid: 761ae59a2f5df6148918073ea0fbcdf8,
         type: 3}

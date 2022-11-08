@@ -7,6 +7,8 @@ public class EnemyMovement : MonoBehaviour
 {
     SKU.Attribute _speed = null;
     AILerp _aiLerp = null;
+    CheckPoint _destination;
+    public CheckPoint destination { get { return _destination; } }
 
     void Update()
     {
@@ -18,15 +20,22 @@ public class EnemyMovement : MonoBehaviour
 
     public void InitServer(PlayerBehaviour player, float speed)
     {
-        transform.position = player.grid.GetComponent<CheckpointManager>().start.position;
-        
         _speed = new SKU.Attribute(speed);
         GetComponent<AttributeManager>().Add(AttributeType.Speed, _speed);
+        
+        CheckPoint start = player.grid.GetComponent<CheckPointList>().start;
+        transform.position = start.transform.position;
 
         _aiLerp = gameObject.AddComponent<AILerp>();
-        _aiLerp.destination = player.grid.GetComponent<CheckpointManager>().end.position;
+        SetNextDestination(start.next);
 
         RaycastModifier modifier = gameObject.AddComponent<RaycastModifier>();
         modifier.quality = RaycastModifier.Quality.Highest;
+    }
+
+    public void SetNextDestination(CheckPoint destination)
+    {
+        _destination = destination;
+        _aiLerp.destination = destination.transform.position;
     }
 }

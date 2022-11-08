@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Pathfinding;
+using Unity.Netcode;
 using UnityEngine;
 
 public class GridCell
@@ -10,19 +11,16 @@ public class GridCell
 
 public class GridManager : MonoBehaviour 
 {
-    [SerializeField]
-    GameObject _ground;
+    [SerializeField] GameObject _ground;
+    [SerializeField] CheckPointList _checkPoints;
 
-    [SerializeField]
-    int _width;
+    [SerializeField] int _width;
     public int width { get { return _width; } set { _width = value; } }
 
-    [SerializeField]
-    int _height;
+    [SerializeField] int _height;
     public int height { get { return _height; } set { _height = value; } }
 
-    [SerializeField]
-    float _size;
+    [SerializeField] float _size;
     public float size { get { return _size; } set { _size = value; } }
 
     Vector3 _min;
@@ -30,12 +28,7 @@ public class GridManager : MonoBehaviour
     GridCell[] _grid;
     GridGraph _gridGraph;
 
-    void Start()
-    {
-        GenerateGrid();
-    }
-
-    public void GenerateGrid()
+    public void Generate()
     {
         _min = transform.position;
         _min.x -= (_width / 2.0f) * _size;
@@ -63,7 +56,7 @@ public class GridManager : MonoBehaviour
 
     void OnDestroy()
     {
-        if (_gridGraph != null)
+        if (AstarPath.active != null && _gridGraph != null)
         {
             AstarPath.active.data.RemoveGraph(_gridGraph);
         }
@@ -92,7 +85,7 @@ public class GridManager : MonoBehaviour
 
     public Vector2Int GetCoordFromPosition(Vector3 position)
     {
-        Vector2Int coord = Vector2Int.zero;
+        Vector2Int coord = Vector2Int.one;
         coord.x = position.x < _min.x ? 0 : (position.x > _max.x ? _width : (int)((position.x - _min.x) / _size));
         coord.y = position.z < _min.z ? 0 : (position.z > _max.z ? _width : (int)((position.z - _min.z) / _size));
         return coord;
@@ -106,22 +99,31 @@ public class GridManager : MonoBehaviour
 
     public Vector3 GetCellCenterFromCoord(Vector2Int coord)
     {
-        Vector3 cellCenterPos = Vector3.zero;
+        Vector3 cellCenterPos = Vector3.one;
         cellCenterPos.x = _min.x + coord.x * _size + _size * 0.5f;
+        cellCenterPos.y = _size * 0.5f;
         cellCenterPos.z = _min.z + coord.y * _size + _size * 0.5f;
         return cellCenterPos;
     }
 
     public bool CanPlaceObject(GameObject gameObject)
     {
-        var guo = new GraphUpdateObject(gameObject.GetComponentInChildren<Collider>().bounds);
-        guo.modifyWalkability = true;
-        guo.setWalkability = false;
+        CheckPoint checkPoint = _checkPoints.start;
+        while (checkPoint.next != null)
+        {
+            GraphUpdateObject guo = new GraphUpdateObject(gameObject.GetComponentInChildren<Collider>().bounds);
+            guo.modifyWalkability = true;
+            guo.setWalkability = false;
 
-        // TODO: check object with all checkpoints
-        var start = _gridGraph.GetNearest(GameObject.FindWithTag("SpawnStart").transform.position).node;
-        var end = _gridGraph.GetNearest(GameObject.FindWithTag("SpawnEnd").transform.position).node;
-        return GraphUpdateUtilities.UpdateGraphsNoBlock(guo, start, end, true);
+            var node = _gridGraph.GetNearest(checkPoint.transform.position).node;
+            var nextNode = _gridGraph.GetNearest(checkPoint.next.transform.position).node;
+            checkPoint = checkPoint.next;
+            if (!GraphUpdateUtilities.UpdateGraphsNoBlock(guo, node, nextNode, true))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     void OnDrawGizmos()
