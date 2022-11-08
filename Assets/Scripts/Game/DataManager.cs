@@ -19,7 +19,8 @@ public enum TowerType
 
 public class DataManager : Singleton<DataManager>
 {
-    public List<WaveData> _waves = null;
+    [SerializeField] List<WaveData> _waves = null;
+    public List<WaveData> waves { get { return _waves; } set { _waves = value; } }
 
     [SerializeField]
     private BulletTypeGameObjectDictionary _bullets = BulletTypeGameObjectDictionary.New<BulletTypeGameObjectDictionary>();

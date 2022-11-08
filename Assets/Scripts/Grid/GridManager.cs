@@ -55,6 +55,7 @@ public class GridManager : MonoBehaviour
 
         _gridGraph = AstarPath.active.data.AddGraph(typeof(GridGraph)) as GridGraph;
         _gridGraph.collision.heightMask = LayerMask.GetMask("Terrain");
+        _gridGraph.collision.collisionCheck = false;
         _gridGraph.center = transform.position;
         _gridGraph.SetDimensions(_width, _height, _size);
         _gridGraph.Scan();
@@ -82,6 +83,10 @@ public class GridManager : MonoBehaviour
         if (x >= 0 && x < _width && y >= 0 && y < _height)
         {
             _grid[y * _width + x].IsEmpty = empty;
+            AstarPath.active.AddWorkItem(new AstarWorkItem(() => {
+                _gridGraph.GetNode(x, y).Walkable = empty;
+                _gridGraph.CalculateConnectionsForCellAndNeighbours(x, y);
+            }));
         }
     }
 
@@ -96,7 +101,12 @@ public class GridManager : MonoBehaviour
     public Vector3 GetCellCenterFromPosition(Vector3 position)
     {
         Vector2Int coord = GetCoordFromPosition(position);
-        Vector3 cellCenterPos = position;
+        return GetCellCenterFromCoord(coord);
+    }
+
+    public Vector3 GetCellCenterFromCoord(Vector2Int coord)
+    {
+        Vector3 cellCenterPos = Vector3.zero;
         cellCenterPos.x = _min.x + coord.x * _size + _size * 0.5f;
         cellCenterPos.z = _min.z + coord.y * _size + _size * 0.5f;
         return cellCenterPos;
@@ -105,9 +115,13 @@ public class GridManager : MonoBehaviour
     public bool CanPlaceObject(GameObject gameObject)
     {
         var guo = new GraphUpdateObject(gameObject.GetComponentInChildren<Collider>().bounds);
+        guo.modifyWalkability = true;
+        guo.setWalkability = false;
+
+        // TODO: check object with all checkpoints
         var start = _gridGraph.GetNearest(GameObject.FindWithTag("SpawnStart").transform.position).node;
         var end = _gridGraph.GetNearest(GameObject.FindWithTag("SpawnEnd").transform.position).node;
-        return GraphUpdateUtilities.UpdateGraphsNoBlock(guo, start, end, false);
+        return GraphUpdateUtilities.UpdateGraphsNoBlock(guo, start, end, true);
     }
 
     void OnDrawGizmos()

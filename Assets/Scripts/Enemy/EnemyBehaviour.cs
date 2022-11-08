@@ -43,7 +43,7 @@ public class EnemyBehaviour : NetworkBehaviour, ISelectable, ITargetable
         if (IsServer)
         {
             health = _data.health;
-            _healthAtt = new SKU.ResourceAttribute(_data.health, _data.health, 1, 0.5f);
+            _healthAtt = new SKU.ResourceAttribute(_data.health, _data.health, 1f, 0.5f);
             _healthAtt.AddOnValueChangedListener(UpdateHealth);
 
             AttributeManager attributeManager = gameObject.AddComponent<AttributeManager>();

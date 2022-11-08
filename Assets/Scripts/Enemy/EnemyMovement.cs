@@ -6,13 +6,13 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
     SKU.Attribute _speed = null;
-    AIPath _aiPath = null;
+    AILerp _aiLerp = null;
 
     void Update()
     {
-        if (_aiPath != null)
+        if (_aiLerp != null)
         {
-            _aiPath.maxSpeed = _speed.Value;
+            _aiLerp.speed = _speed.Value;
         }
     }
 
@@ -23,13 +23,10 @@ public class EnemyMovement : MonoBehaviour
         _speed = new SKU.Attribute(speed);
         GetComponent<AttributeManager>().Add(AttributeType.Speed, _speed);
 
-        _aiPath = gameObject.AddComponent<AIPath>();
-        _aiPath.pickNextWaypointDist = 0.5f;
-        AIDestinationSetter destination = gameObject.AddComponent<AIDestinationSetter>();
-        destination.target = player.grid.GetComponent<CheckpointManager>().end;
+        _aiLerp = gameObject.AddComponent<AILerp>();
+        _aiLerp.destination = player.grid.GetComponent<CheckpointManager>().end.position;
 
         RaycastModifier modifier = gameObject.AddComponent<RaycastModifier>();
-        modifier.thickRaycast = true;
-        modifier.thickRaycastRadius = 0.5f;
+        modifier.quality = RaycastModifier.Quality.Highest;
     }
 }

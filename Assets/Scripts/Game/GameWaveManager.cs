@@ -34,7 +34,7 @@ public class GameWaveManager : NetworkSingleton<GameWaveManager>
     {
         SetState(GameState.WaitingForPlayers);
         _entities = EntityManager.instance;
-        _waves = DataManager.instance._waves;
+        _waves = DataManager.instance.waves;
     }
 
     void Update()
