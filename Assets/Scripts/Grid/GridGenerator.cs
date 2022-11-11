@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class GridGenerator : MonoBehaviour 
@@ -8,26 +9,15 @@ public class GridGenerator : MonoBehaviour
     [SerializeField] List<AGridGeneratorSystem> _gridGenerators;
     List<Vector2Int> _availablePositions = new List<Vector2Int>();
 
-    public void Generate(GridManager grid, Transform ground)
+    public void Generate(GridManager grid, Transform ground, int seed)
     {
-        Random.InitState(42);
-        _availablePositions.Clear();
-        for (int x = 0; x < grid.width; x++)
-        {
-            for (int y = 0; y < grid.height; y++)
-            {
-                _availablePositions.Add(new Vector2Int(x, y));
-            }
-        }
-
-        GenerateSystem(grid, _gridPathGeneratoor, ground);
-        for (int j = 0; j < _gridGenerators.Count; j++)
-        {
-            GenerateSystem(grid, _gridGenerators[j], ground);
-        }
+        Random.InitState(seed);
+        DespawnSystem();
+        InitAvailablePositions(grid);
+        Spawn(grid, ground);
     }
 
-    void GenerateSystem(GridManager grid, AGridGeneratorSystem gridGenerator, Transform ground)
+    void SpawnSystem(GridManager grid, AGridGeneratorSystem gridGenerator, Transform ground)
     {
         int count = gridGenerator.GetRandomCount();
         for (int i = 0; i < count; i++)
@@ -39,6 +29,36 @@ public class GridGenerator : MonoBehaviour
             // if position is not blocking path keep spawning, otherwise and get a new one
             GameObject go = gridGenerator.Spawn(grid, grid.GetCellCenterFromCoord(coord));
             go.transform.SetParent(ground);
+        }
+    }
+
+    void InitAvailablePositions(GridManager grid)
+    {
+        _availablePositions.Clear();
+        for (int x = 0; x < grid.width; x++)
+        {
+            for (int y = 0; y < grid.height; y++)
+            {
+                _availablePositions.Add(new Vector2Int(x, y));
+            }
+        }
+    }
+
+    void Spawn(GridManager grid, Transform ground)
+    {
+        SpawnSystem(grid, _gridPathGeneratoor, ground);
+        foreach (AGridGeneratorSystem gridGenerator in _gridGenerators)
+        {
+            SpawnSystem(grid, gridGenerator, ground);
+        }
+    }
+
+    void DespawnSystem()
+    {
+        _gridPathGeneratoor.DespawnAll();
+        foreach (AGridGeneratorSystem gridGenerator in _gridGenerators)
+        {
+            gridGenerator.DespawnAll();
         }
     }
 }

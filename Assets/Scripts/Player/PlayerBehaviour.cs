@@ -43,14 +43,12 @@ public class PlayerBehaviour : NetworkBehaviour
             SetGoldServerRpc(100);
             UpdateGold();
             CameraManager.instance.SetCameraMovement(new FollowCamera(gameObject.transform, new Vector3(0f, 5, -10)));
-            GenerateServerRpc();
         }
     }
 
-    [ServerRpc]
-    public void GenerateServerRpc()
+    public void Generate(int seed = 42)
     {
-        _gridGenerator.Generate(_grid, transform);
+        _gridGenerator.Generate(_grid, transform, seed);
     }
 
     [ServerRpc]

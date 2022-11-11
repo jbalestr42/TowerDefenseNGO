@@ -24,4 +24,13 @@ public class CheckPointSystem : AGridGeneratorSystem
         _checkPoints.Add(checkPoint);
         return checkPoint.gameObject;
     }
+
+    public override void DespawnAll()
+    {
+        foreach (CheckPoint checkPoint in _checkPoints)
+        {
+            checkPoint.GetComponent<NetworkObject>().Despawn();
+        }
+        _checkPoints.Clear();
+    }
 }

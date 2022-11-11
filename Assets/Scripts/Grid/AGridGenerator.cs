@@ -16,4 +16,6 @@ public abstract class AGridGeneratorSystem : MonoBehaviour
     }
 
     public abstract GameObject Spawn(GridManager grid, Vector3 position);
+
+    public abstract void DespawnAll();
 }
