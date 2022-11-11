@@ -23,7 +23,7 @@ public class EnemyMovement : MonoBehaviour
         _speed = new SKU.Attribute(speed);
         GetComponent<AttributeManager>().Add(AttributeType.Speed, _speed);
         
-        CheckPoint start = player.grid.GetComponent<CheckPointList>().start;
+        CheckPoint start = player.grid.GetComponent<CheckPointSystem>().start;
         transform.position = start.transform.position;
 
         _aiLerp = gameObject.AddComponent<AILerp>();

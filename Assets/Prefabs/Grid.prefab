@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 1293989677201975774}
   - component: {fileID: 1293989677201975772}
   - component: {fileID: 3570410942703119636}
-  - component: {fileID: 491125164113188394}
+  - component: {fileID: 4796522870559552952}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ground: {fileID: 1293989675970250086}
-  _checkPoints: {fileID: 491125164113188394}
+  _checkPoints: {fileID: 0}
   _width: 32
   _height: 32
   _size: 1
@@ -161,9 +161,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4be5bcabbfe86f148b8749288a3b2cdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gridPathGeneratoor: {fileID: 491125164113188394}
+  _gridPathGeneratoor: {fileID: 4796522870559552952}
   _gridGenerators: []
---- !u!114 &491125164113188394
+--- !u!114 &4796522870559552952
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1293989677201975775}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e4fb0f157b7b424ca4ba2f940bf55a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 51e649e13e54af44aaa511b582e95fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _min: 2

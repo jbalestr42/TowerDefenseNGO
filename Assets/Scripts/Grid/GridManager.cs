@@ -12,7 +12,7 @@ public class GridCell
 public class GridManager : MonoBehaviour 
 {
     [SerializeField] GameObject _ground;
-    [SerializeField] CheckPointList _checkPoints;
+    [SerializeField] CheckPointSystem _checkPoints;
 
     [SerializeField] int _width;
     public int width { get { return _width; } set { _width = value; } }

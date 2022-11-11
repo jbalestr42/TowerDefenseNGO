@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class CheckPointList : AGridGeneratorSystem
+public class CheckPointSystem : AGridGeneratorSystem
 {
     [SerializeField] CheckPoint _checkpointPrefab;
 
