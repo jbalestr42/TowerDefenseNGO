@@ -5,63 +5,70 @@ using UnityEngine;
 
 public class GridGenerator : MonoBehaviour 
 {
-    [SerializeField] AGridGeneratorSystem _gridPathGeneratoor;
-    [SerializeField] List<AGridGeneratorSystem> _gridGenerators;
-    List<Vector2Int> _availablePositions = new List<Vector2Int>();
+    [SerializeField] GridGeneratorSystem _gridPathGenerator;
+    [SerializeField] List<GridGeneratorSystem> _gridGenerators;
+
+    List<GridCell> _availableCells = new List<GridCell>();
+    GridManager _gridManager;
 
     public void Generate(GridManager grid, Transform ground, int seed)
     {
+        _gridManager = grid;
         Random.InitState(seed);
-        DespawnSystem();
+        DespawnSystems();
         InitAvailablePositions(grid);
-        Spawn(grid, ground);
+        SpawnSystems(grid, ground);
     }
 
-    void SpawnSystem(GridManager grid, AGridGeneratorSystem gridGenerator, Transform ground)
+    void SpawnSystem(GridManager grid, GridGeneratorSystem gridGenerator, Transform ground)
     {
-        int count = gridGenerator.GetRandomCount();
-        for (int i = 0; i < count; i++)
+        gridGenerator.Spawn(this);
+        foreach (GameObject spawnedObject in gridGenerator.spawnedObjects)
         {
-            int index = Random.Range(0, _availablePositions.Count - 1);
-            Vector2Int coord = _availablePositions[index];
-            _availablePositions.RemoveAt(index);
-
-            // if position is not blocking path keep spawning, otherwise and get a new one
-            GameObject go = gridGenerator.Spawn(grid, grid.GetCellCenterFromCoord(coord));
-            go.transform.SetParent(ground);
+            spawnedObject.transform.SetParent(ground);
         }
+    }
+
+    public GridCell GetRandomCell(bool isWalkable)
+    {
+        int index = Random.Range(0, _availableCells.Count - 1);
+        GridCell cell = _availableCells[index];
+        _availableCells.RemoveAt(index);
+        _gridManager.SetEmpty(cell, isWalkable);
+        return cell;
     }
 
     void InitAvailablePositions(GridManager grid)
     {
-        _availablePositions.Clear();
-        for (int x = 0; x < grid.width; x++)
+        _availableCells.Clear();
+        foreach (GridCell cell in grid.cells)
         {
-            for (int y = 0; y < grid.height; y++)
-            {
-                _availablePositions.Add(new Vector2Int(x, y));
-            }
+            grid.SetEmpty(cell, true);
+            _availableCells.Add(cell);
         }
     }
 
-    void Spawn(GridManager grid, Transform ground)
+    void SpawnSystems(GridManager grid, Transform ground)
     {
-        SpawnSystem(grid, _gridPathGeneratoor, ground);
-        foreach (AGridGeneratorSystem gridGenerator in _gridGenerators)
+        SpawnSystem(grid, _gridPathGenerator, ground);
+        foreach (GridGeneratorSystem gridGenerator in _gridGenerators)
         {
             SpawnSystem(grid, gridGenerator, ground);
         }
     }
 
-    void DespawnSystem()
+    void DespawnSystems()
     {
-        _gridPathGeneratoor.DespawnAll();
-        foreach (AGridGeneratorSystem gridGenerator in _gridGenerators)
+        _gridPathGenerator.DespawnAll();
+        foreach (GridGeneratorSystem gridGenerator in _gridGenerators)
         {
             gridGenerator.DespawnAll();
         }
     }
 }
+
+            // Use fonction en grid cell enter/leave ? with on applyeffect() on enter
+
 
 // obstacle
 // checkpoint

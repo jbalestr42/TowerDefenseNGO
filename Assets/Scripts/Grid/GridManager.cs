@@ -1,13 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Pathfinding;
-using Unity.Netcode;
 using UnityEngine;
-
-public class GridCell
-{
-    public bool IsEmpty { get; set; }
-}
 
 public class GridManager : MonoBehaviour 
 {
@@ -23,9 +17,11 @@ public class GridManager : MonoBehaviour
     [SerializeField] float _size;
     public float size { get { return _size; } set { _size = value; } }
 
+    GridCell[] _cells;
+    public GridCell[] cells { get { return _cells; } set { _cells = value; } }
+
     Vector3 _min;
     Vector3 _max;
-    GridCell[] _grid;
     GridGraph _gridGraph;
 
     public void Generate()
@@ -37,11 +33,13 @@ public class GridManager : MonoBehaviour
         _max.x += (_width / 2.0f) * _size + _size;
         _max.z += (_height / 2.0f) * _size + _size;
 
-        _grid = new GridCell[_width * _height];
-        for (int i = 0; i < _grid.Length; i++)
+        _cells = new GridCell[_width * _height];
+        for (int i = 0; i < _cells.Length; i++)
         {
-            _grid[i] = new GridCell();
-            _grid[i].IsEmpty = true;
+            _cells[i] = new GridCell();
+            _cells[i].isEmpty = true;
+            _cells[i].coord = new Vector2Int(i % _width, i / _width);
+            _cells[i].center = GetCellCenterFromCoord(_cells[i].coord);
         }
 
         _ground.transform.localScale = new Vector3(_width * _size, 1f, _height * _size);
@@ -66,16 +64,21 @@ public class GridManager : MonoBehaviour
     {
         if (x >= 0 && x < _width && y >= 0 && y < _height)
         {
-            return _grid[y * _width + x].IsEmpty;
+            return _cells[y * _width + x].isEmpty;
         }
         return false;
+    }
+
+    public void SetEmpty(GridCell cell, bool empty)
+    {
+        SetEmpty(cell.coord.x, cell.coord.y, empty);
     }
 
     public void SetEmpty(int x, int y, bool empty)
     {
         if (x >= 0 && x < _width && y >= 0 && y < _height)
         {
-            _grid[y * _width + x].IsEmpty = empty;
+            _cells[y * _width + x].isEmpty = empty;
             AstarPath.active.AddWorkItem(new AstarWorkItem(() => {
                 _gridGraph.GetNode(x, y).Walkable = empty;
                 _gridGraph.CalculateConnectionsForCellAndNeighbours(x, y);
@@ -115,8 +118,12 @@ public class GridManager : MonoBehaviour
             guo.modifyWalkability = true;
             guo.setWalkability = false;
 
-            var node = _gridGraph.GetNearest(checkPoint.transform.position).node;
-            var nextNode = _gridGraph.GetNearest(checkPoint.next.transform.position).node;
+            Vector2Int nodeCoord = GetCoordFromPosition(checkPoint.transform.position);
+            var node = _gridGraph.GetNode(nodeCoord.x, nodeCoord.y);
+            Vector2Int nextNodeCoord = GetCoordFromPosition(checkPoint.next.transform.position);
+            var nextNode = _gridGraph.GetNode(nextNodeCoord.x, nextNodeCoord.y);
+            //var node = _gridGraph.GetNearest(checkPoint.transform.position).node;
+            //var nextNode = _gridGraph.GetNearest(checkPoint.next.transform.position).node;
             checkPoint = checkPoint.next;
             if (!GraphUpdateUtilities.UpdateGraphsNoBlock(guo, node, nextNode, true))
             {
