@@ -6,5 +6,4 @@ public class GridCell
 {
     public Vector2Int coord { get; set; }
     public Vector3 center { get; set; }
-    public bool isEmpty { get; set; }
 }

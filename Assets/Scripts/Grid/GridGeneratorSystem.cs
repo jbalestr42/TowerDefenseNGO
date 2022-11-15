@@ -5,6 +5,12 @@ using UnityEngine;
 
 public class GridGeneratorSystem : MonoBehaviour
 {
+    public class GridObject
+    {
+        public GridCell cell;
+        public GameObject gameObject;
+    }
+
     [SerializeField] int _min = 2;
     public int min { get { return _min; } set { _min = value; } }
 
@@ -14,40 +20,41 @@ public class GridGeneratorSystem : MonoBehaviour
     [SerializeField] GameObject _prefab;
 
     [SerializeField] bool _isWalkable = false;
+    public bool isWalkable { get { return _isWalkable; } set { _isWalkable = value; } }
 
-    List<GameObject> _spawnedObjects = new List<GameObject>();
-    public List<GameObject> spawnedObjects { get { return _spawnedObjects; } }
+    List<GridObject> _spawnedObjects = new List<GridObject>();
+    public List<GridObject> spawnedObjects { get { return _spawnedObjects; } }
 
     public int count { get { return _spawnedObjects.Count; } }
 
-    public int GetRandomCount()
+    public virtual IEnumerator Spawn(GridGenerator gridGenerator)
     {
-        return Random.Range(_min, _max);
-    }
-
-    public virtual void Spawn(GridGenerator gridGenerator)
-    {
-        int count = GetRandomCount();
+        int count = gridGenerator.randomGenerator.Next(_min, _max);
         for (int i = 0; i < count; i++)
         {
             GridCell cell = gridGenerator.GetRandomCell(_isWalkable);
-            SpawnObject(cell.center);
+            if (cell != null)
+            {
+                SpawnObject(cell);
+            }
+
+            yield return gridGenerator.coroutineGenerationDelay;
         }
     }
 
-    public virtual GameObject SpawnObject(Vector3 position)
+    public virtual GameObject SpawnObject(GridCell cell)
     {
-        GameObject go = Instantiate(_prefab, position, Quaternion.identity);
+        GameObject go = Instantiate(_prefab, cell.center, Quaternion.identity);
         go.GetComponent<NetworkObject>().Spawn();
-        _spawnedObjects.Add(go);
+        _spawnedObjects.Add(new GridObject() { cell = cell, gameObject = go });
         return go;
     }
 
     public virtual void DespawnAll()
     {
-        foreach (GameObject go in _spawnedObjects)
+        foreach (GridObject gridObject in _spawnedObjects)
         {
-            go.GetComponent<NetworkObject>().Despawn();
+            gridObject.gameObject.GetComponent<NetworkObject>().Despawn();
         }
         _spawnedObjects.Clear();
     }

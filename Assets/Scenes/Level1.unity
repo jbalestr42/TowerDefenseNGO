@@ -1927,7 +1927,7 @@ PrefabInstance:
     - target: {fileID: 4894230336466293716, guid: 761ae59a2f5df6148918073ea0fbcdf8,
         type: 3}
       propertyPath: NetworkConfig.NetworkPrefabs.Array.size
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4894230336466293716, guid: 761ae59a2f5df6148918073ea0fbcdf8,
         type: 3}
@@ -1958,6 +1958,12 @@ PrefabInstance:
       propertyPath: NetworkConfig.NetworkPrefabs.Array.data[4].Prefab
       value: 
       objectReference: {fileID: 9141750140142513886, guid: 356c856d27b224948a6a15287e83110a,
+        type: 3}
+    - target: {fileID: 4894230336466293716, guid: 761ae59a2f5df6148918073ea0fbcdf8,
+        type: 3}
+      propertyPath: NetworkConfig.NetworkPrefabs.Array.data[5].Prefab
+      value: 
+      objectReference: {fileID: 9141750140142513886, guid: 5020aa3db259197438d9fde407d8fbd5,
         type: 3}
     - target: {fileID: 4894230336466293717, guid: 761ae59a2f5df6148918073ea0fbcdf8,
         type: 3}

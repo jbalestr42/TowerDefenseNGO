@@ -31,7 +31,6 @@ public class TowerBehaviour : NetworkBehaviour, ISelectable, IAttacker
 
     public override void OnNetworkSpawn()
     {
-        Debug.Log("OnNetworkSpawn " + towerType);
         _attackRate.OnValueChanged += (float old, float value) => { UpdateStat(); };
         _damage.OnValueChanged += (float old, float value) => { UpdateStat(); };
         _range.OnValueChanged += (float old, float value) => { UpdateStat(); };
@@ -46,7 +45,6 @@ public class TowerBehaviour : NetworkBehaviour, ISelectable, IAttacker
 
     void UpdateData()
     {
-        Debug.Log("Tower type " + _towerType);
         _data = DataManager.instance.GetTowerData(_towerType.Value);
 
         if (IsServer)

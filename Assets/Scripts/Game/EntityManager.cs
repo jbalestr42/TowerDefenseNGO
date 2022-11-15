@@ -110,16 +110,16 @@ public class EntityManager : NetworkSingleton<EntityManager>
         PlayerBehaviour player = NetworkManager.Singleton.ConnectedClients[playerId].PlayerObject.GetComponent<PlayerBehaviour>();
         Vector2Int coord = player.grid.GetCoordFromPosition(position);
 
-        if (player.grid.IsEmpty(coord.x, coord.y) && player.gold >= data.cost)
+        if (player.grid.IsWalkable(coord.x, coord.y) && player.gold >= data.cost)
         {
             GameObject tower = Instantiate(_towerBasePrefab, Vector3.zero, Quaternion.identity);
             tower.transform.position = position;
 
-            if (player.grid.CanPlaceObject(tower))
+            if (player.grid.CanPlaceObject(coord))
             {
                 tower.GetComponent<NetworkObject>().SpawnWithOwnership(playerId);
                 tower.GetComponent<TowerBehaviour>().towerType = towerType;
-                player.grid.SetEmpty(coord.x, coord.y, false);
+                player.grid.SetWalkable(coord.x, coord.y, false);
                 player.gold -= data.cost;
                 _towers.Add(tower);
             }

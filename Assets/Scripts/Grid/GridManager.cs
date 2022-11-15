@@ -6,6 +6,7 @@ using UnityEngine;
 public class GridManager : MonoBehaviour 
 {
     [SerializeField] GameObject _ground;
+
     [SerializeField] CheckPointSystem _checkPoints;
 
     [SerializeField] int _width;
@@ -37,7 +38,6 @@ public class GridManager : MonoBehaviour
         for (int i = 0; i < _cells.Length; i++)
         {
             _cells[i] = new GridCell();
-            _cells[i].isEmpty = true;
             _cells[i].coord = new Vector2Int(i % _width, i / _width);
             _cells[i].center = GetCellCenterFromCoord(_cells[i].coord);
         }
@@ -47,6 +47,7 @@ public class GridManager : MonoBehaviour
         _gridGraph = AstarPath.active.data.AddGraph(typeof(GridGraph)) as GridGraph;
         _gridGraph.collision.heightMask = LayerMask.GetMask("Terrain");
         _gridGraph.collision.collisionCheck = false;
+        _gridGraph.showNodeConnections = true;
         _gridGraph.center = transform.position;
         _gridGraph.SetDimensions(_width, _height, _size);
         _gridGraph.Scan();
@@ -60,29 +61,50 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public bool IsEmpty(int x, int y)
+    public GridCell GetCell(Vector2Int coord)
     {
-        if (x >= 0 && x < _width && y >= 0 && y < _height)
+        return GetCell(coord.x, coord.y);
+    }
+
+    public GridCell GetCell(int x, int y)
+    {
+        return _cells[y * _width + x];
+    }
+
+    public bool IsWalkable(int x, int y)
+    {
+        if (IsValidCoord(x, y))
         {
-            return _cells[y * _width + x].isEmpty;
+            return _gridGraph.GetNode(x, y).Walkable;
         }
         return false;
     }
 
-    public void SetEmpty(GridCell cell, bool empty)
+    public bool IsValidCoord(int x, int y)
     {
-        SetEmpty(cell.coord.x, cell.coord.y, empty);
+        return x >= 0 && x < _width && y >= 0 && y < _height;
     }
 
-    public void SetEmpty(int x, int y, bool empty)
+    public bool IsValidCoord(Vector2Int coord)
     {
-        if (x >= 0 && x < _width && y >= 0 && y < _height)
+        return IsValidCoord(coord.x, coord.y);
+    }
+
+    public void SetWalkable(GridCell cell, bool walkable)
+    {
+        SetWalkable(cell.coord.x, cell.coord.y, walkable);
+    }
+
+    public void SetWalkable(int x, int y, bool walkable)
+    {
+        if (IsValidCoord(x, y))
         {
-            _cells[y * _width + x].isEmpty = empty;
             AstarPath.active.AddWorkItem(new AstarWorkItem(() => {
-                _gridGraph.GetNode(x, y).Walkable = empty;
+                _gridGraph.GetNode(x, y).Walkable = walkable;
                 _gridGraph.CalculateConnectionsForCellAndNeighbours(x, y);
+                //_gridGraph.GetNodes(node => _gridGraph.CalculateConnections((GridNodeBase)node));
             }));
+            AstarPath.active.FlushWorkItems();
         }
     }
 
@@ -109,28 +131,46 @@ public class GridManager : MonoBehaviour
         return cellCenterPos;
     }
 
-    public bool CanPlaceObject(GameObject gameObject)
+    public bool CanPlaceObject(GridCell cell)
+    {
+        return CanPlaceObject(cell.coord);
+    }
+
+    public bool CanPlaceObject(Vector2Int coord)
+    {
+        return CanPlaceObject(new Bounds(GetCellCenterFromCoord(coord), new Vector3(_size, _size, _size)));
+    }
+
+    public bool CanPlaceObject(Bounds bounds)
     {
         CheckPoint checkPoint = _checkPoints.start;
-        while (checkPoint.next != null)
-        {
-            GraphUpdateObject guo = new GraphUpdateObject(gameObject.GetComponentInChildren<Collider>().bounds);
-            guo.modifyWalkability = true;
-            guo.setWalkability = false;
+        GraphUpdateObject guo = new GraphUpdateObject(bounds);
+        guo.modifyWalkability = true;
+        guo.setWalkability = false;
 
+        List<GraphNode> nodes = new List<GraphNode>();
+        while (checkPoint != null)
+        {
             Vector2Int nodeCoord = GetCoordFromPosition(checkPoint.transform.position);
             var node = _gridGraph.GetNode(nodeCoord.x, nodeCoord.y);
-            Vector2Int nextNodeCoord = GetCoordFromPosition(checkPoint.next.transform.position);
-            var nextNode = _gridGraph.GetNode(nextNodeCoord.x, nextNodeCoord.y);
-            //var node = _gridGraph.GetNearest(checkPoint.transform.position).node;
-            //var nextNode = _gridGraph.GetNearest(checkPoint.next.transform.position).node;
+            nodes.Add(node);
             checkPoint = checkPoint.next;
-            if (!GraphUpdateUtilities.UpdateGraphsNoBlock(guo, node, nextNode, true))
-            {
-                return false;
-            }
         }
-        return true;
+        return GraphUpdateUtilities.UpdateGraphsNoBlock(guo, nodes, true);
+    }
+
+    public bool IsPathPossible()
+    {
+        CheckPoint checkPoint = _checkPoints.start;
+        List<GraphNode> nodes = new List<GraphNode>();
+        while (checkPoint != null)
+        {
+            Vector2Int nodeCoord = GetCoordFromPosition(checkPoint.transform.position);
+            var node = _gridGraph.GetNode(nodeCoord.x, nodeCoord.y);
+            nodes.Add(node);
+            checkPoint = checkPoint.next;
+        }
+        return PathUtilities.IsPathPossible(nodes);
     }
 
     void OnDrawGizmos()
