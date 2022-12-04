@@ -173,6 +173,15 @@ public class GridManager : MonoBehaviour
         return PathUtilities.IsPathPossible(nodes);
     }
 
+    public Vector3 GetNearestWalkablePosition(Vector3 position)
+    {
+        NNConstraint constraint = NNConstraint.None;
+        constraint.constrainWalkability = true;
+        constraint.walkable = true;
+        NNInfoInternal info = _gridGraph.GetNearestForce(position, constraint);
+        return (Vector3)info.node.position;
+    }
+
     void OnDrawGizmos()
     {
         Vector3 position = transform.position;
