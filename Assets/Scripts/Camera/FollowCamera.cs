@@ -10,7 +10,7 @@ public class FollowCamera : ICameraMovement
     float _zoom = 1f;
     public float zoom { get { return _zoom; } set { _zoom = Mathf.Clamp(value, _minZoom, _maxZoom); } }
 
-    [SerializeField] float _minZoom = 1f;
+    [SerializeField] float _minZoom = 0.5f;
     public float minZoom { get { return _minZoom; } set { _minZoom = value; } }
 
     [SerializeField] float _maxZoom = 3f;
@@ -28,8 +28,6 @@ public class FollowCamera : ICameraMovement
     public void Update(Camera camera)
     {
         Vector3 targetPosition = _target.transform.position + _offset * _zoom;
-        //Vector3 targetPosition = _target.TransformPoint(_offset); to look toward the target
-
         camera.transform.position = Vector3.SmoothDamp(camera.transform.position, targetPosition, ref _velocity, _smoothTime);
         camera.transform.LookAt(_target);
     }

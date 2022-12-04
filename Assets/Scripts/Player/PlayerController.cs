@@ -14,7 +14,7 @@ public class PlayerController : NetworkBehaviour
     {
         if (IsOwner)
         {
-            _cameraMovement = new FollowCamera(_cameraTarget, new Vector3(0f, 10, -10));
+            _cameraMovement = new FollowCamera(_cameraTarget, new Vector3(0f, 30f, -5f));
             CameraManager.instance.SetCameraMovement(_cameraMovement);
         }
     }
