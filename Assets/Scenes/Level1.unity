@@ -1927,37 +1927,37 @@ PrefabInstance:
     - target: {fileID: 4894230336466293716, guid: 761ae59a2f5df6148918073ea0fbcdf8,
         type: 3}
       propertyPath: NetworkConfig.NetworkPrefabs.Array.size
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4894230336466293716, guid: 761ae59a2f5df6148918073ea0fbcdf8,
         type: 3}
       propertyPath: NetworkConfig.NetworkPrefabs.Array.data[0].Prefab
       value: 
-      objectReference: {fileID: 1354588657643068, guid: 90371a4bb96e09047ae9824eae0152c3,
+      objectReference: {fileID: 1773381645329648, guid: 1b790f12c1e467142a438e84a42fa25c,
         type: 3}
     - target: {fileID: 4894230336466293716, guid: 761ae59a2f5df6148918073ea0fbcdf8,
         type: 3}
       propertyPath: NetworkConfig.NetworkPrefabs.Array.data[1].Prefab
       value: 
-      objectReference: {fileID: 1773381645329648, guid: 1b790f12c1e467142a438e84a42fa25c,
+      objectReference: {fileID: 1906707749200160, guid: 1d85feb25b3aa9e46bef77c6d6096efe,
         type: 3}
     - target: {fileID: 4894230336466293716, guid: 761ae59a2f5df6148918073ea0fbcdf8,
         type: 3}
       propertyPath: NetworkConfig.NetworkPrefabs.Array.data[2].Prefab
       value: 
-      objectReference: {fileID: 1906707749200160, guid: 1d85feb25b3aa9e46bef77c6d6096efe,
+      objectReference: {fileID: 4498265667456953475, guid: d65642e23c5dea54e9414195b1e33c99,
         type: 3}
     - target: {fileID: 4894230336466293716, guid: 761ae59a2f5df6148918073ea0fbcdf8,
         type: 3}
       propertyPath: NetworkConfig.NetworkPrefabs.Array.data[3].Prefab
       value: 
-      objectReference: {fileID: 4498265667456953475, guid: d65642e23c5dea54e9414195b1e33c99,
+      objectReference: {fileID: 9141750140142513886, guid: 356c856d27b224948a6a15287e83110a,
         type: 3}
     - target: {fileID: 4894230336466293716, guid: 761ae59a2f5df6148918073ea0fbcdf8,
         type: 3}
       propertyPath: NetworkConfig.NetworkPrefabs.Array.data[4].Prefab
       value: 
-      objectReference: {fileID: 9141750140142513886, guid: 356c856d27b224948a6a15287e83110a,
+      objectReference: {fileID: 9141750140142513886, guid: 5020aa3db259197438d9fde407d8fbd5,
         type: 3}
     - target: {fileID: 4894230336466293716, guid: 761ae59a2f5df6148918073ea0fbcdf8,
         type: 3}

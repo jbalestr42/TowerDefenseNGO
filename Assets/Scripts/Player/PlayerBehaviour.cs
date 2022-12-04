@@ -42,7 +42,6 @@ public class PlayerBehaviour : NetworkBehaviour
             current = this;
             SetGoldServerRpc(100);
             UpdateGold();
-            CameraManager.instance.SetCameraMovement(new FollowCamera(gameObject.transform, new Vector3(0f, 5, -10)));
         }
     }
 

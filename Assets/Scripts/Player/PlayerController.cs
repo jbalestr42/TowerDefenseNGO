@@ -5,48 +5,27 @@ using Unity.Netcode;
 
 public class PlayerController : NetworkBehaviour
 {
-    CharacterController _controller;
-    bool _groundedPlayer = false;
-    Vector3 _playerVelocity;
-    float _playerSpeed = 2.0f;
-    float _jumpHeight = 1.0f;
-    float _gravityValue = -9.81f;
-
-    void Start()
-    {
-        _controller = GetComponent<CharacterController>();
-    }
+    [SerializeField] Transform _cameraTarget;
+    [SerializeField] float _playerSpeed = 40.0f;
+    [SerializeField] float _zoomSpeed = 50.0f;
+    FollowCamera _cameraMovement = null;
 
     public override void OnNetworkSpawn()
     {
         if (IsOwner)
         {
-            CameraManager.instance.SetCameraMovement(new FollowCamera(gameObject.transform, new Vector3(0f, 5, -10)));
+            _cameraMovement = new FollowCamera(_cameraTarget, new Vector3(0f, 10, -10));
+            CameraManager.instance.SetCameraMovement(_cameraMovement);
         }
     }
 
     void Update()
     {
-        _groundedPlayer = _controller.isGrounded;
-        if (_groundedPlayer && _playerVelocity.y < 0)
+        if (_cameraMovement != null)
         {
-            _playerVelocity.y = 0f;
+            Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
+            _cameraMovement.zoom += Input.mouseScrollDelta.y * Time.deltaTime * _zoomSpeed * -1f;
+            _cameraTarget.Translate(move * Time.deltaTime * _playerSpeed);
         }
-
-        Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        _controller.Move(move * Time.deltaTime * _playerSpeed);
-
-        if (move != Vector3.zero)
-        {
-            gameObject.transform.forward = move;
-        }
-
-        if (Input.GetButtonDown("Jump") && _groundedPlayer)
-        {
-            _playerVelocity.y += Mathf.Sqrt(_jumpHeight * -3.0f * _gravityValue);
-        }
-
-        _playerVelocity.y += _gravityValue * Time.deltaTime;
-        _controller.Move(_playerVelocity * Time.deltaTime);
     }
 }
