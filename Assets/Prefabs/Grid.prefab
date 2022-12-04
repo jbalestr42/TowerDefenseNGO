@@ -110,6 +110,7 @@ GameObject:
   - component: {fileID: 3570410942703119636}
   - component: {fileID: 4796522870559552952}
   - component: {fileID: 5265550454449666727}
+  - component: {fileID: 2600735427571436636}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -165,6 +166,7 @@ MonoBehaviour:
   _gridPathGenerator: {fileID: 4796522870559552952}
   _gridGenerators:
   - {fileID: 5265550454449666727}
+  - {fileID: 2600735427571436636}
 --- !u!114 &4796522870559552952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,4 +200,22 @@ MonoBehaviour:
   _prefab: {fileID: 9141750140142513886, guid: 5020aa3db259197438d9fde407d8fbd5, type: 3}
   _isWalkable: 0
   _minSize: 5
+  _maxSize: 15
+--- !u!114 &2600735427571436636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1293989677201975775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9ca7fa6a579f86469e8c9f18be8a721, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _min: 0
+  _max: 10
+  _prefab: {fileID: 9141750140142513886, guid: 85843ec4ec95b2e43afc75a5ae3d42b5, type: 3}
+  _isWalkable: 0
+  _minSize: 4
   _maxSize: 15

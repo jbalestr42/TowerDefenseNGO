@@ -108,9 +108,6 @@ public class GridGenerator : MonoBehaviour
 }
 
 // Use fonction en grid cell enter/leave ? with on applyeffect() on enter
-// obstacle
-// checkpoint
-// empty zone
 // teleportation
 // gain gold x1.5 // overlay + need empty block
 // damage zone // overlay + no need empty block
