@@ -111,6 +111,8 @@ GameObject:
   - component: {fileID: 4796522870559552952}
   - component: {fileID: 5265550454449666727}
   - component: {fileID: 2600735427571436636}
+  - component: {fileID: 8007633991651993631}
+  - component: {fileID: 3206882778938240405}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -167,6 +169,8 @@ MonoBehaviour:
   _gridGenerators:
   - {fileID: 5265550454449666727}
   - {fileID: 2600735427571436636}
+  - {fileID: 8007633991651993631}
+  - {fileID: 3206882778938240405}
 --- !u!114 &4796522870559552952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,3 +223,39 @@ MonoBehaviour:
   _isWalkable: 0
   _minSize: 4
   _maxSize: 15
+--- !u!114 &8007633991651993631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1293989677201975775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9ca7fa6a579f86469e8c9f18be8a721, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _min: 5
+  _max: 20
+  _prefab: {fileID: 9141750140142513886, guid: da842a6995590834bb739e0155f6530b, type: 3}
+  _isWalkable: 1
+  _minSize: 0
+  _maxSize: 1
+--- !u!114 &3206882778938240405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1293989677201975775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9ca7fa6a579f86469e8c9f18be8a721, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _min: 5
+  _max: 20
+  _prefab: {fileID: 9141750140142513886, guid: cba6d7659632330418f7f516f2a506cc, type: 3}
+  _isWalkable: 1
+  _minSize: 0
+  _maxSize: 1

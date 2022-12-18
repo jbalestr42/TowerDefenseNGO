@@ -7,6 +7,6 @@ namespace SKU {
     public interface IAttributeModifier {
 
         float ApplyModifier();
-        bool IsOver();
+        bool isOver { get; }
     }
 }

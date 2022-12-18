@@ -123,7 +123,7 @@ public class TowerBehaviour : NetworkBehaviour, ISelectable, IAttacker
             {
                 if (_data.modifiers[i] == ModifierType.Time)
                 {
-                    attributes.Get<SKU.Attribute>(AttributeType.Speed).AddRelativeModifier(Factory.CreateModifier(ModifierType.Time, 2f, -0.8f));
+                    attributes.Get<SKU.Attribute>(AttributeType.Speed).AddRelativeModifier(gameObject, Factory.CreateModifier(ModifierType.Time, 2f, -0.8f));
                 }
             }
         }

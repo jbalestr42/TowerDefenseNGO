@@ -5,6 +5,8 @@ using UnityEngine;
 public class FlatModifier : SKU.IAttributeModifier
 {
     float _value = 0f;
+    bool _isOver = false;
+    public bool isOver { get { return _isOver; } set { _isOver = value; } }
 
     public FlatModifier(float value)
     {
@@ -14,10 +16,5 @@ public class FlatModifier : SKU.IAttributeModifier
     public float ApplyModifier()
     {
         return _value;
-    }
-
-    public bool IsOver()
-    {
-        return false;
     }
 }

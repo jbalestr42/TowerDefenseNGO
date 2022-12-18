@@ -7,6 +7,8 @@ public class RegenModifier : SKU.IAttributeModifier
     float _regenRate = 0f;
     float _value = 0f;
     float _start = 0f;
+    bool _isOver = false;
+    public bool isOver { get { return _isOver; } set { _isOver = value; } }
 
     public RegenModifier(float value, float regenRate)
     {
@@ -24,10 +26,5 @@ public class RegenModifier : SKU.IAttributeModifier
             return _value;
         }
         return 0f;
-    }
-
-    public bool IsOver()
-    {
-        return false;
     }
 }

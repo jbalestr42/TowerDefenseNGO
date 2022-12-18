@@ -13,8 +13,9 @@ namespace SKU
         float _baseValue;
         float _value;
         float _prevValue;
-        List<IAttributeModifier> _relativeModifiers;
-        List<IAttributeModifier> _absoluteModifiers;
+
+        Dictionary<GameObject, List<IAttributeModifier>> _relativeModifiers;
+        Dictionary<GameObject, List<IAttributeModifier>> _absoluteModifiers;
 
         public Attribute()
             : this(0f) { }
@@ -23,32 +24,41 @@ namespace SKU
         {
             _prevValue = _value;
             _baseValue = value;
-            _relativeModifiers = new List<SKU.IAttributeModifier>();
-            _absoluteModifiers = new List<SKU.IAttributeModifier>();
+            _relativeModifiers = new Dictionary<GameObject, List<IAttributeModifier>>();
+            _absoluteModifiers = new Dictionary<GameObject, List<IAttributeModifier>>();
             Update();
         }
 
         public void Update()
         {
             float relativeBonus = 1f;
-            for (int i = _relativeModifiers.Count - 1; i >= 0; i--)
+            foreach (var kvp in _relativeModifiers)
             {
-                relativeBonus *= 1f + _relativeModifiers[i].ApplyModifier();
-                if (_relativeModifiers[i].IsOver())
+                List<IAttributeModifier> modifiers = kvp.Value;
+                for (int i = modifiers.Count - 1; i >= 0; i--)
                 {
-                    _relativeModifiers.RemoveAt(i);
+                    relativeBonus *= 1f + modifiers[i].ApplyModifier();
+                    if (modifiers[i].isOver)
+                    {
+                        modifiers.RemoveAt(i);
+                    }
                 }
             }
 
             float absoluteBonus = 0f;
-            for (int i = _absoluteModifiers.Count - 1; i >= 0; i--)
+            foreach (var kvp in _absoluteModifiers)
             {
-                absoluteBonus += _absoluteModifiers[i].ApplyModifier();
-                if (_absoluteModifiers[i].IsOver())
+                List<IAttributeModifier> modifiers = kvp.Value;
+                for (int i = modifiers.Count - 1; i >= 0; i--)
                 {
-                    _absoluteModifiers.RemoveAt(i);
+                    absoluteBonus += modifiers[i].ApplyModifier();
+                    if (modifiers[i].isOver)
+                    {
+                        modifiers.RemoveAt(i);
+                    }
                 }
             }
+            // TODO remove modifiers from source if empty
 
             _prevValue = _value;
             _value = _baseValue * relativeBonus + absoluteBonus;
@@ -60,14 +70,42 @@ namespace SKU
             }
         }
 
-        public void AddRelativeModifier(IAttributeModifier modifier)
+        public void AddRelativeModifier(GameObject source, IAttributeModifier modifier)
         {
-            _relativeModifiers.Add(modifier);
+            if (!_relativeModifiers.ContainsKey(source))
+            {
+                _relativeModifiers[source] = new List<IAttributeModifier>();
+            }
+            _relativeModifiers[source].Add(modifier);
         }
 
-        public void AddAbsoluteModifier(IAttributeModifier modifier)
+        public List<IAttributeModifier> GetRelativeModifier(GameObject source)
         {
-            _absoluteModifiers.Add(modifier);
+            return _relativeModifiers[source];
+        }
+
+        public void RemoveRelativeModifierFromSource(GameObject source)
+        {
+            _relativeModifiers[source].Clear();
+        }
+
+        public void AddAbsoluteModifier(GameObject source, IAttributeModifier modifier)
+        {
+            if (!_absoluteModifiers.ContainsKey(source))
+            {
+                _absoluteModifiers[source] = new List<IAttributeModifier>();
+            }
+            _absoluteModifiers[source].Add(modifier);
+        }
+
+        public List<IAttributeModifier> GetAbsoluteModifier(GameObject source)
+        {
+            return _absoluteModifiers[source];
+        }
+
+        public void RemoveAbsoluteModifierFromSource(GameObject source)
+        {
+            _absoluteModifiers[source].Clear();
         }
 
         public float Value

@@ -7,6 +7,7 @@ public class TimeModifier : SKU.IAttributeModifier
     float _duration = 0f;
     float _value = 0f;
     float _start = 0f;
+    public bool isOver { get { return (Time.realtimeSinceStartup - _start) >= _duration; } }
 
     public TimeModifier(float duration, float value)
     {
@@ -18,11 +19,6 @@ public class TimeModifier : SKU.IAttributeModifier
     public float ApplyModifier()
     {
         return _value * (1f - GetRatio());
-    }
-
-    public bool IsOver()
-    {
-        return (Time.realtimeSinceStartup - _start) >= _duration;
     }
 
     float GetRatio()

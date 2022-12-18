@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   model: {fileID: 6705402075998324148, guid: d941199d4a58fcb45adc75ea8e37c42c, type: 3}
   health: 50
-  speed: 4
+  speed: 5
   score: 10
   gold: 5
   lifeCost: 1

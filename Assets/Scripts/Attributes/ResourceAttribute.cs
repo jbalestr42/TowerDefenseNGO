@@ -36,7 +36,7 @@ namespace SKU
             for (int i = _modifiers.Count - 1; i >= 0; i--)
             {
                 _value += _modifiers[i].ApplyModifier();
-                if (_modifiers[i].IsOver())
+                if (_modifiers[i].isOver)
                 {
                     _modifiers.RemoveAt(i);
                 }
