@@ -30,9 +30,7 @@ public class GridInteraction : AInteraction
     {
         if (_tower)
         {
-            // TODO get the nearest available cell
             _tower.transform.position = PlayerBehaviour.current.grid.GetNearestWalkablePosition(position);
-            Debug.Log("[DEBUG] " + position + " - " + _tower.transform.position);
         }
     }
 
