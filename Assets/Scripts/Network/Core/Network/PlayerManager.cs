@@ -38,12 +38,6 @@ public class PlayerManager : NetworkBehaviour
     {
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
         NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
-        if (IsHost)
-        {
-            ClientRole clientRole = (ClientRole)Enum.Parse(typeof(ClientRole), PlayerPrefs.GetString("client_role", ClientRole.Player.ToString()));
-            Debug.Log($"Client '{NetworkManager.Singleton.LocalClientId}' requests player spawn for role '{clientRole}'");
-            SpawnPlayer(NetworkManager.Singleton.LocalClientId, clientRole);
-        }
         if (IsServer)
         {
             UIDebugManager.AddMessage(this);
@@ -68,8 +62,6 @@ public class PlayerManager : NetworkBehaviour
     public void OnClientConnected(ulong clientId)
     {
         Debug.Log($"[PlayerManager] Client '{clientId}' connected");
-        Debug.Log(IsHost);
-        Debug.Log(NetworkManager.Singleton.LocalClientId);
         if (IsClient && NetworkManager.Singleton.LocalClientId == clientId)
         {
             ClientRole clientRole = (ClientRole)Enum.Parse(typeof(ClientRole), PlayerPrefs.GetString("client_role", ClientRole.Player.ToString()));
