@@ -8,17 +8,17 @@ public enum PanelType {
     Enemy,
 }
 
-public class UIManager : Singleton<UIManager> {
+public class UIManager : Singleton<UIManager>
+{
 
-    public UnityEngine.UI.Button _isReadyButton;
-    public UnityEngine.UI.InputField _inputFieldName;
-    public List<UnityEngine.UI.Button> _chooseColor;
-    public UnityEngine.UI.Text _goldText;
-    public UnityEngine.UI.Text _scoreText;
-    public UnityEngine.UI.Text _lifeText;
+    [SerializeField] UnityEngine.UI.Button _isReadyButton;
+    [SerializeField] UnityEngine.UI.InputField _inputFieldName;
+    [SerializeField] UnityEngine.UI.Text _goldText;
+    [SerializeField] UnityEngine.UI.Text _scoreText;
+    [SerializeField] UnityEngine.UI.Text _lifeText;
+    [SerializeField] UnityEngine.UI.Text _timerText;
 
-    public PanelTower _uiTower;
-    public UIInventory _uiInventory;
+    [SerializeField] UIInventory _uiInventory;
 
     PanelType _selectedPanel = PanelType.None;
     MonoBehaviour _selectedMono = null;
@@ -84,6 +84,16 @@ public class UIManager : Singleton<UIManager> {
     public void SetLife(int life)
     {
         _lifeText.text = "Life: " + life.ToString();
+    }
+
+    public void SetTimer(float time)
+    {
+        _timerText.text = time.ToString();
+    }
+
+    public void ShowTimer(bool show)
+    {
+        _timerText.gameObject.SetActive(show);
     }
 
     public void OnReadyStateChanged(bool ready)
